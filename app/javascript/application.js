@@ -3,21 +3,16 @@ import "@hotwired/turbo-rails"
 import "./controllers"
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import App from './App';
+// import Users from './Users';
 
-function App() {
-  return (
-    <div>
-      <h1>react</h1>
-      <form action="/users" method="post">
-        <input type="text" name="user[name]" />
-        <input type="submit" value="Create User" />
-      </form>
-      <div></div>
-    </div>
-  );
-}
 
 ReactDOM.render(
-  <App/>,
+  <Router>
+    <Routes>
+      <Route path="/" element={<App />} />
+    </Routes>
+  </Router>,
   document.getElementById('root'),
 );
