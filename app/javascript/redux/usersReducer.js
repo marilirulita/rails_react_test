@@ -21,29 +21,28 @@ const getUserFailure = () => ({
   type: GET_USER_FAILURE,
 });
 
+const fetchUsers = () => async (dispatch) => {
+  dispatch(getUser());
+  try {
+    const res = await axios.get('/users');
+    const users = res.data.user;
+    dispatch(getUserSuccess(users));
+  } catch (err) {
+    dispatch(getUserFailure());
+  }
+};
+
 // const fetchUsers = () => async (dispatch) => {
 //   dispatch(getUser());
 //   try {
-//     const res = await axios.get('/users');
-//     const users = res.data.name;
+//     const res = await fetch('/users');
+//     const users = await res.user.json();
 //     console.log(users);
 //     dispatch(getUserSuccess(users));
 //   } catch (err) {
 //     dispatch(getUserFailure());
 //   }
 // };
-
-const fetchUsers = () => async (dispatch) => {
-  dispatch(getUser());
-  try {
-    const res = await fetch('/users');
-    const users = await res.json();
-    console.log(users);
-    dispatch(getUserSuccess(users));
-  } catch (err) {
-    dispatch(getUserFailure());
-  }
-};
 
 const usersReducer = ( state = initialState, action) => {
   switch (action.type) {

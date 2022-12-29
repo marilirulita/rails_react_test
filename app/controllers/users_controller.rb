@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   def index
-    render :json => User.all
-    # render json: { user: User.all }, status: :ok
+    @user = User.find(1)
+    # render :json => @user.name
+    render json: { user: @user.name }, status: :ok
   end
 end

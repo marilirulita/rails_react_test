@@ -4,11 +4,10 @@ import { fetchUsers } from './redux/usersReducer';
 
 const Users = () => {
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.users);
+  const users = useSelector((store) => store.users);
 
   useEffect(() => {
     dispatch(fetchUsers());
-    console.log(users);
   }, [dispatch]);
 
   return (
@@ -18,7 +17,7 @@ const Users = () => {
         <input type="text" name="user[name]" />
         <input type="submit" value="Create User" />
       </form>
-      {/* <div> {users} </div> */}
+      <div> {users.users} </div>
     </div>
   );
 }
