@@ -6,20 +6,18 @@ import Search from './Search';
 
 const Users = () => {
   const dispatch = useDispatch();
-  const userName = useSelector((state) => state.username.userName);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  console.log(isLoggedIn);
+  const username = useSelector((state) => state.username.userName);
   const userNameRef = useRef();
-
-  // useEffect(() => {
-    
-  // }, [dispatch]);
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(userNameRef.current.value)
     dispatch(usernameActions.getUser(userNameRef.current.value));
-    dispatch(authActions.login());
+    if (username) {
+      console.log(username);
+      dispatch(authActions.login());
+    }
+    // dispatch(authActions.login());
     // const userName = userNameRef.current.value;
     // const formData = new FormData();
     // formData.append('user[name]', userName);
@@ -35,9 +33,11 @@ const Users = () => {
 
   return (
     <div>
+      { username && <h1>{username}</h1>}
       { isLoggedIn && <Search id={1} name={"mar"} price={25} /> }
       { !isLoggedIn && 
       <form onSubmit={onSubmit} action="/users" method="post">
+
         <input ref={ userNameRef } type="text" name="user[name]" />
         <input type="submit" value="Create User" />
       </form> }

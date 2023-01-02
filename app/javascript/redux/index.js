@@ -1,11 +1,28 @@
-import { createSlice, configureStore } from "@reduxjs/toolkit";
+import { createSlice, configureStore, applyMiddleware } from "@reduxjs/toolkit";
+import reduxLogger from "redux-logger";
 
 const usernameSlice = createSlice({
   name: "username",
   initialState: { userName: "" },
   reducers: {
     getUser(state, action) {
-      state.userName = action.payload;
+      const fetchUsers = async () => {
+      try {
+        const answer = await fetch("/users")
+        const data = await answer.json();
+        data.forEach(user => {
+          if (user.name === action.payload) {
+            state.userName = action.payload;
+          } else {
+            console.log("No user found");
+          }
+        });
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    fetchUsers();
     },
   },
 });
@@ -58,17 +75,19 @@ const searchSlice = createSlice({
   },
 });
 
-
 export const usernameActions = usernameSlice.actions;
 export const authActions = authSlice.actions;
 export const searchActions = searchSlice.actions;
+
+// const logger = reduxLogger.createLogger();
 
 const store = configureStore({
   reducer: {
     username: usernameSlice.reducer,
     auth: authSlice.reducer,
     search: searchSlice.reducer,
-  } 
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(reduxLogger),
 });
 
 export default store;
