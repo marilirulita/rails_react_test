@@ -80,6 +80,41 @@ const alertSlice = createSlice({
   },
 });
 
+export const fetchUsers = (username) => {
+  return (dispatch) => {
+    dispatch(alertActions.showNotification({
+      message: "Sending Request", 
+      type: "warning", 
+      open: true}));
+    try {
+      fetch('/users')
+        .then((res) => res.json())
+        .then((data) => {
+          data.forEach(user => {
+            if (user.name === username) {
+              console.log("User found");
+              dispatch(alertActions.showNotification({
+                message: "Request succesfull", 
+                type: "success", 
+                open: true}));
+              dispatch(usernameActions.getUser(username));
+              dispatch(authActions.login());
+            } else {
+              dispatch(alertActions.showNotification({
+                message: "No user found", 
+                type: "info", 
+                open: true}));
+            }
+          });
+        }
+      );} catch (err) {
+          dispatch(alertActions.showNotification({
+            message: err, 
+            type: "error", 
+            open: true}));
+        }
+  };
+};
 
 export const usernameActions = usernameSlice.actions;
 export const authActions = authSlice.actions;

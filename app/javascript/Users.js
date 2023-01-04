@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { authActions, usernameActions, searchActions, alertActions } from './redux/index';
+import { searchActions, fetchUsers } from './redux/index';
 import Search from './Search';
 import Notification from './Notification';
 
@@ -17,38 +17,8 @@ const Users = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(alertActions.showNotification({
-      message: "Sending Request", 
-      type: "warning", 
-      open: true}));
-    try {
-    fetch('/users')
-      .then((res) => res.json())
-      .then((data) => {
-        data.forEach(user => {
-          if (user.name === userNameRef.current.value) {
-            dispatch(alertActions.showNotification({
-              message: "Request succesfull", 
-              type: "success", 
-              open: true}));
-            dispatch(usernameActions.getUser(userNameRef.current.value));
-            dispatch(authActions.login());
-          } else {
-            dispatch(alertActions.showNotification({
-              message: "No user found", 
-              type: "info", 
-              open: true}));
-          }
-        });
-      }
-    );} catch (err) {
-      dispatch(alertActions.showNotification({
-        message: err, 
-        type: "error", 
-        open: true}));
-    }
+    dispatch(fetchUsers(userNameRef.current.value));
 
-    // dispatch(authActions.login());
     // const userName = userNameRef.current.value;
     // const formData = new FormData();
     // formData.append('user[name]', userName);
@@ -74,7 +44,6 @@ const Users = () => {
       { !isLoggedIn && 
       <div>
       <form onSubmit={onSubmit} action="/users" method="post">
-
         <input ref={ userNameRef } type="text" name="user[name]" />
         <input type="submit" value="Create User" />
       </form> 
