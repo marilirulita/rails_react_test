@@ -6,13 +6,7 @@ const usernameSlice = createSlice({
   initialState: { userName: "" },
   reducers: {
     getUser(state, action) {
-        action.payload.forEach(user => {
-          if (user.name === 'mar') {
-            state.userName = user.name;
-          } else {
-            console.log("No user found");
-          }
-        });
+        state.userName = action.payload;
       // }
       // catch (err) {
       //   console.log(err);
@@ -23,7 +17,7 @@ const usernameSlice = createSlice({
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: { isLoggedIn: true },
+  initialState: { isLoggedIn: false },
   reducers: {
     login(state) {
       state.isLoggedIn = true;

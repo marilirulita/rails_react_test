@@ -17,11 +17,23 @@ const Users = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(usernameActions.getUser(userNameRef.current.value));
-    if (username) {
-      console.log(username);
-      dispatch(authActions.login());
+    try {
+    fetch('/users')
+      .then((res) => res.json())
+      .then((data) => {
+        data.forEach(user => {
+          if (user.name === userNameRef.current.value) {
+            dispatch(usernameActions.getUser(userNameRef.current.value));
+            dispatch(authActions.login());
+          } else {
+            console.log("No user found");
+          }
+        });
+      }
+    );} catch (err) {
+      console.log(err);
     }
+    
     // dispatch(authActions.login());
     // const userName = userNameRef.current.value;
     // const formData = new FormData();
@@ -37,14 +49,7 @@ const Users = () => {
   };
 
   useEffect(() => {
-    fetch('/users')
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        dispatch(usernameActions.getUser(data));
-      }
-    );
-    console.log(username);
+    
   }, [username]);
   return (
     <div>
