@@ -66,15 +66,32 @@ const searchSlice = createSlice({
   },
 });
 
+const alertSlice = createSlice({
+  name: "alert",
+  initialState: { alert: null },
+  reducers: {
+    showNotification(state, action) {
+      state.alert = {
+        message: action.payload.message,
+        type: action.payload.type,
+        open: action.payload.open,
+      }
+    },
+  },
+});
+
+
 export const usernameActions = usernameSlice.actions;
 export const authActions = authSlice.actions;
 export const searchActions = searchSlice.actions;
+export const alertActions = alertSlice.actions;
 
 const store = configureStore({
   reducer: {
     username: usernameSlice.reducer,
     auth: authSlice.reducer,
     search: searchSlice.reducer,
+    alert: alertSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(reduxLogger),
 });

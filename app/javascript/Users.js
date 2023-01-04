@@ -1,14 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { authActions, usernameActions, searchActions } from './redux/index';
+import { authActions, usernameActions, searchActions, alertActions } from './redux/index';
 import Search from './Search';
-// import { fetchUsers } from './redux/usersReducer';
+import Notification from './Notification';
 
 const Users = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const username = useSelector((state) => state.username.userName);
   const showSearch = useSelector((state) => state.search.showSearch);
+  const alert = useSelector((state) => state.alert.alert);
   const userNameRef = useRef();
 
   const showSearchElements = () => {
@@ -17,23 +17,37 @@ const Users = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    dispatch(alertActions.showNotification({
+      message: "Sending Request", 
+      type: "warning", 
+      open: true}));
     try {
     fetch('/users')
       .then((res) => res.json())
       .then((data) => {
         data.forEach(user => {
           if (user.name === userNameRef.current.value) {
+            dispatch(alertActions.showNotification({
+              message: "Request succesfull", 
+              type: "success", 
+              open: true}));
             dispatch(usernameActions.getUser(userNameRef.current.value));
             dispatch(authActions.login());
           } else {
-            console.log("No user found");
+            dispatch(alertActions.showNotification({
+              message: "No user found", 
+              type: "info", 
+              open: true}));
           }
         });
       }
     );} catch (err) {
-      console.log(err);
+      dispatch(alertActions.showNotification({
+        message: err, 
+        type: "error", 
+        open: true}));
     }
-    
+
     // dispatch(authActions.login());
     // const userName = userNameRef.current.value;
     // const formData = new FormData();
@@ -48,12 +62,10 @@ const Users = () => {
     //   });
   };
 
-  useEffect(() => {
-    
-  }, [username]);
   return (
     <div>
-      { username && <h1>{username}</h1>}
+      { alert && <Notification type={alert.type} mess={alert.message} />
+      }
       { isLoggedIn && 
       <div>
         <h3 onClick={showSearchElements} >Search Elements</h3>
