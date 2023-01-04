@@ -1,4 +1,4 @@
-import { createSlice, configureStore, applyMiddleware } from "@reduxjs/toolkit";
+import { createSlice, configureStore } from "@reduxjs/toolkit";
 import reduxLogger from "redux-logger";
 
 const usernameSlice = createSlice({
@@ -6,30 +6,24 @@ const usernameSlice = createSlice({
   initialState: { userName: "" },
   reducers: {
     getUser(state, action) {
-      const fetchUsers = async () => {
-      try {
-        const answer = await fetch("/users")
-        const data = await answer.json();
-        data.forEach(user => {
-          if (user.name === action.payload) {
-            state.userName = action.payload;
+        action.payload.forEach(user => {
+          if (user.name === 'mar') {
+            state.userName = user.name;
           } else {
             console.log("No user found");
           }
         });
-      }
-      catch (err) {
-        console.log(err);
-      }
-    }
-    fetchUsers();
+      // }
+      // catch (err) {
+      //   console.log(err);
+      // }
     },
   },
 });
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: { isLoggedIn: false },
+  initialState: { isLoggedIn: true },
   reducers: {
     login(state) {
       state.isLoggedIn = true;
@@ -71,6 +65,9 @@ const searchSlice = createSlice({
 
         state.totalQuantity++;
       }
+    },
+    showSearch(state) {
+      state.showSearch = !state.showSearch;
     }
   },
 });
@@ -78,8 +75,6 @@ const searchSlice = createSlice({
 export const usernameActions = usernameSlice.actions;
 export const authActions = authSlice.actions;
 export const searchActions = searchSlice.actions;
-
-// const logger = reduxLogger.createLogger();
 
 const store = configureStore({
   reducer: {
