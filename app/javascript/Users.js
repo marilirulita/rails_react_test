@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { searchActions, fetchUsers } from './redux/index';
+import { searchActions, authActions, fetchUsers } from './redux/index';
 import Search from './Search';
 import Notification from './Notification';
 
@@ -13,6 +13,10 @@ const Users = () => {
 
   const showSearchElements = () => {
     dispatch(searchActions.showSearch());
+  }
+
+  const logOut = () => {
+    dispatch(authActions.logout());
   }
 
   const onSubmit = (e) => {
@@ -39,16 +43,20 @@ const Users = () => {
       { isLoggedIn && 
       <div>
         <h3 onClick={showSearchElements} >Search Elements</h3>
-      </div>}
-      { showSearch && <Search id={1} name={"mar"} price={25} />}
+        <button onClick={logOut} >Log out</button>
+        { showSearch && <Search id={1} name={"mar"} price={25} />}
+      </div>
+           }
+ 
       { !isLoggedIn && 
       <div>
+        <h3>Log in to save search</h3>
       <form onSubmit={onSubmit} action="/users" method="post">
         <input ref={ userNameRef } type="text" name="user[name]" />
-        <input type="submit" value="Create User" />
-      </form> 
+        <input type="submit" value="Log in" />
+      </form>
+
       </div>}
-      
     </div>
   );
 }
