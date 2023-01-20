@@ -87,8 +87,27 @@
 // // };
 
 fetch('/users')
-  .then((res) => res.json())
-  .then((data) => {
-    console.log(data);
-  }
-);
+  .then((response) => response.json())
+  .then((data) => console.log(data));
+
+  const data = { name: 'example' };
+
+  fetch('/users', {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify('testing'),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
