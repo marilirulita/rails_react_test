@@ -86,11 +86,9 @@
 // //   getUser, getUserSuccess, getUserFailure, fetchUsers,
 // // };
 
-fetch('/users')
+fetch('/users/1', { method: 'DELETE' })
   .then((response) => response.json())
   .then((data) => console.log(data));
-
-  const data = { name: 'example' };
 
   fetch('/users', {
     method: 'POST',
@@ -102,7 +100,7 @@ fetch('/users')
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-    body: JSON.stringify('testing'),
+    body: JSON.stringify({name: 'example'}),
   })
     .then((response) => response.json())
     .then((data) => {
