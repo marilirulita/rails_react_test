@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  protect_from_forgery with: :null_session
+  
   def index
     # render :json => @user.name
     render json: User.all, status: :ok
@@ -9,15 +11,12 @@ class UsersController < ApplicationController
     render json: { user: @user.name }, status: :ok
   end
 
-  def create
-    # respond_with User.create(user_params)
-    @user = User.create({ "name": params[:name] })
-    render json: params
+ def create
+    @user = User.new(user_params)
     if @user.save
       render json: @user, status: :created
     else
-      render json: { errors: "User not created" }, status: :unprocessable_entity
-      # render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -30,7 +29,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    # params.permit(:name)
     params.require(:user).permit(:name)
   end
 end
