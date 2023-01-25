@@ -43,7 +43,7 @@ const Users = () => {
       .then((data) => {
         console.log("Success crating a new user")
         console.log(data);
-        // dispatch(fetchUsers());
+        dispatch(fetchUsers(userName));
       });
   };
 
