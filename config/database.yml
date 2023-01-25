@@ -22,7 +22,10 @@ test:
   # database: db/test.sqlite3
   database: testing_webpack_test
 
+# production:
+#   <<: *default
+#   database: testing_webpack_production
+
 production:
-  <<: *default
-  # database: db/production.sqlite3
-  database: testing_webpack_production
+<<: *default
+url: <%= ENV['DATABASE_URL'] %>
